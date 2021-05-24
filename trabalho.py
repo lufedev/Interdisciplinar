@@ -24,7 +24,7 @@ def regressao(c1,c2,c3):
     #qual é a média pro "nome3" quando o "nome" e o "nome2" são = 1000
     pred = regr.predict([[1000, 1000]])
     print(regr.coef_) 
-    print(pred) 
+    print(pred) g
 
 
 for col in range(1,len(viagens.columns)):
