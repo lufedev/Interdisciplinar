@@ -1,40 +1,68 @@
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import linear_model
 
-viagens = pd.read_csv('viagens2.csv', sep=';')
-del viagens['Unnamed: 5']
+lst_viagens = pd.read_csv('viagens2.csv', sep=';')
+del lst_viagens['Unnamed: 5']
 
-def correlacao(c1,c2):
-    nome = viagens.columns[c1]
-    nome2 = viagens.columns[c2]
+def correlacao(column1, column2):
+    column1_name = lst_viagens.columns[column1]
+    column2_name = lst_viagens.columns[column2]
 
-    print("\nValor de correlação: ",viagens[nome].corr(viagens[nome2]))
+    correlation = lst_viagens[column1_name].corr(lst_viagens[column2_name])
 
-def regressao(c1,c2,c3):
-    nome  = viagens.columns[c1]
-    nome2 = viagens.columns[c2]
-    nome3 = viagens.columns[c3]
-    X = viagens[[nome,nome2]]
-    Y = viagens[nome3]
+    print(f"\nValor de correlação: { correlation }")
 
-    regr = linear_model.LinearRegression()
-    regr.fit(X, Y)
+def regressao(column1, column2, column3):
+    column1_name = lst_viagens.columns[column1]
+    column2_name = lst_viagens.columns[column2]
+    column3_name = lst_viagens.columns[column3]
+    
+    x = lst_viagens[[column1_name, column2_name]]
+    y = lst_viagens[column3_name]
+
+    regression = linear_model.LinearRegression()
+    regression.fit(x, y)
+    coeficientRegression = regression.coef_
+    score = regression.score(x, y)
+    
     #qual é a média pro "nome3" quando o "nome" e o "nome2" são = 1000
-    pred = regr.predict([[1000, 1000]])
-    print(regr.coef_) 
-    print(pred) g
+    prediction = regression.predict([[1000, 1000]])
+    
+    print(f"\n{ coeficientRegression }")
+    print(f"\nCoeficiente de determinação R² da predição: { score }")
+    print(f"\nPredição usando o modelo linear: { float(prediction) }")
+
+def printColumns(columns):
+    for col in range(1, len(columns)):
+        print(col, ".", columns[col])
+
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
+
+def menu():
+    cls()
+    printColumns(lst_viagens.columns)
+    option = int(input("\n1. Correlação\n2. Regressão\n0. Sair\n"))
+
+    if option == 1:
+        column1 = int(input("\nInsira o número da coluna 1: "))
+        column2 = int(input("Insira o número da coluna 2: "))
+        correlacao(column1, column2)
+        
+        if int(input("\n1. Voltar ao menu\n0. Sair\n")) == 1:
+            menu()
 
 
-for col in range(1,len(viagens.columns)):
-    print(col,".",viagens.columns[col])
+    if option == 2:
+        column1 = int(input("\nInsira o número da coluna 1: "))
+        column2 = int(input("Insira o número da coluna 2: "))
+        column3 = int(input("Insira o número da coluna 3: "))
+        regressao(column1, column2, column3)
 
-c1 = int(input("\nInsira o número da coluna 1: "))
-c2 = int(input("Insira o número da coluna 2: "))
-correlacao(c1,c2)
-c1 = int(input("\nInsira o número da coluna 1: "))
-c2 = int(input("Insira o número da coluna 2: "))
-c3 = int(input("Insira o número da coluna 3: "))
-regressao(c1,c2,c3)
+        if int(input("\n1. Voltar ao menu\n0. Sair\n")) == 1:
+            menu()
 
+menu()
