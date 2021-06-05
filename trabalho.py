@@ -72,11 +72,11 @@ def menu():
     cls()
     # printColumns(lstViagens.columns)
     option = int(input("\n1. Correlação\n2. Regressão\n0. Sair\n"))
-
+    
     if option == 1:
         cls()
-        [print("{}. {}".format(i, columnName))
-         for i, columnName in columnNames()]
+        columns = columnNames()
+        [print("{}. {}".format(column, columns[column])) for column in columns]
 
         column1 = int(input("\nInsira o número da coluna 1: "))
         column2 = int(input("Insira o número da coluna 2: "))
